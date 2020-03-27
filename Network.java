@@ -11,13 +11,6 @@ class Network {
         int width = img.getWidth();
         int height = img.getHeight();
         System.out.println(width + " " + height);
-        
-
-class Network {
-    public static void main(String[] args) {
-        System.out.println("hello world");
-        System.out.println(sigmoid(6));
-    
     }
 
     /*
