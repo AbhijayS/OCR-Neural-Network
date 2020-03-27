@@ -35,7 +35,7 @@ class Network {
     }
 
     /*
-     * Scales a value from the range x1 to x2 to y1 to y2
+     * Scales a value in one range to another
      */
     public static double scale(double value, double x1, double x2, double y1, double y2) {
         double ratio = ((value-x1) / (x2-x1));
