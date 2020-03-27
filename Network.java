@@ -5,6 +5,7 @@ import java.io.IOException;
 
 class Network {
     public static void main(String[] args) throws IOException{
+        
         File file = new File("eight.jpg");
         BufferedImage img = ImageIO.read(file);
         int width = img.getWidth();
@@ -27,5 +28,9 @@ class Network {
      */
     public static double sigmoid(double value) {
         return 1/(1 + Math.exp(-value));
+    }
+
+    public static double greyscale(){
+        return 0;
     }
 }
