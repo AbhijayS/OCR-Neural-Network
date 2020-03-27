@@ -8,7 +8,10 @@ class Network {
     
     }
 
-    
+    /*
+     * Sigmoid Function
+     * Normalizes all real numbers to within 0 and 1
+     */
     public static double sigmoid(double value) {
         return 1/(1 + Math.exp(-value));
     }
