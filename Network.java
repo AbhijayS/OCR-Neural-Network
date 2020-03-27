@@ -11,6 +11,7 @@ class Network {
         int width = img.getWidth();
         int height = img.getHeight();
         System.out.println(width + " " + height);
+        
     }
 
     /*
