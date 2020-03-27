@@ -19,7 +19,7 @@ class Network {
             ( (0.3 * R) + (0.59 * G) + (0.11 * B) ).
         */
 
-        
+        System.out.println(scale(20, 0, 255, 0, 1));
     }
 
     /*
@@ -32,5 +32,14 @@ class Network {
 
     public static double greyscale(){
         return 0;
+    }
+
+    /*
+     * Scales a value from the range x1 to x2 to y1 to y2
+     */
+    public static double scale(double value, double x1, double x2, double y1, double y2) {
+        double ratio = ((value-x1) / (x2-x1));
+        double result = ((y2-y1)*ratio) + y1;
+        return result;
     }
 }
