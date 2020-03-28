@@ -20,6 +20,7 @@ class NeuralNetwork {
     private final int OUTPUT = 10;
     private final int WIDTH = 28;
     private final int HEIGHT = 28;
+    
     // Todo: import the ejml matrix library
     // Todo: test the library and learn how to use it
     // multiply two matrices together
