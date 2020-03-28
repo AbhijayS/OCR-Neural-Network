@@ -4,56 +4,14 @@ import java.io.File;
 import java.io.IOException;
 
 class NeuralNetwork {
-    public static void main(String[] args) throws IOException{
-        File file = new File("eight.jpg");
-        BufferedImage img = ImageIO.read(file);
-        int width = img.getWidth();
-        int height = img.getHeight();
-        System.out.println(width + " " + height);
-        System.out.println( (img.getRGB(0, 0)>>8) & 0xff);
-        
-        // System.out.println(scale(20, 0, 255, 0, 1));
-    }
-    
     private final int WIDTH = 28;
     private final int HEIGHT = 28;
     private final int INPUTS = WIDTH*HEIGHT;
     private final int HIDDEN = 15;
     private final int OUTPUT = 10;
-    
-    // Todo: import the ejml matrix library
-    // Todo: test the library and learn how to use it
-    // multiply two matrices together
-    // add two matrices together
-
-    // input_array(I1, I2, I3, ...)
-    // weight_matrix_1 - HIDDEN X INPUTS
-    /*    I1  I2  I3 ...
-     * H1 W11 W12 W13...
-     * H2 W21 W22 W23...
-     * H3 W31 W32 W33...
-     * ...
-     */
-    // hidden_bias_array
-
-    // hidden_array(H1, H2, H3, ...) - result of (weight_matrix_1)*(input_array)+(hidden_bias_array) using matrix math
-    // weight_matrix_2 - OUTPUT X HIDDEN
-    // output_bias_array
-    // output_array (O1, O2, O3, ...) - result of (weight_matrix_2)*(hidden_array)+(output_bias_array) using matrix math
 
     public NeuralNetwork() {
         // randomly initialize weight_matrix_1, weight_matrix_2, hidden_bias_array, output_bias_array
-    }
-
-    public void feedforward(File file) {
-        // input_array
-        // for each pixel in the image
-        // input_array[x][y] = scale(greyscale(pixel))
-
-        for(int y = 0; y < HEIGHT; y++) {
-            for(int x = 0; x < WIDTH; x++){
-            }
-        }
     }
 
     /*
@@ -62,6 +20,45 @@ class NeuralNetwork {
      * uses the matrix library to compute the values for the hidden_array
      * uses the hidden_array to compute values for the output
      */
+    public double[] feedforward(File file) throws IOException {
+        // input_array
+        // for each pixel in the image
+        // input_array[x][y] = scale(greyscale(pixel))
+        BufferedImage img = ImageIO.read(file);
+        double[] inputArray = new double[INPUTS];
+
+        int count = 0;
+        for(int y = 0; y < HEIGHT; y++) {
+            for(int x = 0; x < WIDTH; x++){
+                inputArray[count] = scale(greyscale(img.getRGB(x, y)), 0, 255, 0, 1);
+                count++;
+            }
+        }
+
+        for (double d : inputArray) {
+            System.out.println(d);
+        }
+
+        return inputArray;
+        
+        // TODO ARSH
+        // weight_matrix_1 - HIDDEN X INPUTS
+        /*    I1  I2  I3 ...
+        * H1 W11 W12 W13...
+        * H2 W21 W22 W23...
+        * H3 W31 W32 W33...
+        * ...
+        */
+        // hidden_bias_array
+
+
+        // TODO ABHIJAY
+        // hidden_array(H1, H2, H3, ...) - result of (weight_matrix_1)*(input_array)+(hidden_bias_array) using matrix math
+        // weight_matrix_2 - OUTPUT X HIDDEN
+        // output_bias_array
+        // output_array (O1, O2, O3, ...) - result of (weight_matrix_2)*(hidden_array)+(output_bias_array) using matrix math
+    }
+
 
     /*
      * train() function
@@ -96,7 +93,7 @@ class NeuralNetwork {
         int b = p&0xff;
         
         //calculate average grayscale number
-        double avg = (0.3 * r) + (0.59 * g) + (0.11 * b)
+        double avg = (0.3 * r) + (0.59 * g) + (0.11 * b);
         return avg;
     }
 
