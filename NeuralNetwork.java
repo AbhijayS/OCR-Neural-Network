@@ -47,26 +47,12 @@ class NeuralNetwork {
 
         inputMatrix = new SimpleMatrix(inputArray);
 
-        // weight_matrix_1 - HIDDEN X INPUTS
-        /*    I1  I2  I3 ...
-        * H1 W11 W12 W13...
-        * H2 W21 W22 W23...
-        * H3 W31 W32 W33...
-        * ...
-        */
         SimpleMatrix hiddenMatrix = (weightMatrixA.mult(inputMatrix)).plus(hiddenBiasMatrix);
 
         for (int i = 0; i < hiddenMatrix.numRows(); i++) {
             double value = sigmoid(hiddenMatrix.get(i,0));
             hiddenMatrix.set(i,0,value);
         }
-
-
-        // TODO ABHIJAY
-        // hidden_array(H1, H2, H3, ...) - result of (weight_matrix_1)*(input_array)+(hidden_bias_array) using matrix math
-        // weight_matrix_2 - OUTPUT X HIDDEN
-        // output_bias_array
-        // output_array (O1, O2, O3, ...) - result of (weight_matrix_2)*(hidden_array)+(output_bias_array) using matrix math
 
         SimpleMatrix outputMatrix = (weightMatrixB.mult(hiddenMatrix)).plus(outputBiasMatrix);
 
