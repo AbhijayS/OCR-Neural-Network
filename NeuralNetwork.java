@@ -11,13 +11,15 @@ class NeuralNetwork {
         int height = img.getHeight();
         System.out.println(width + " " + height);
         System.out.println( (img.getRGB(0, 0)>>8) & 0xff);
-
+        
         // System.out.println(scale(20, 0, 255, 0, 1));
     }
     
     private final int INPUTS = 28*28;
     private final int HIDDEN = 15;
     private final int OUTPUT = 10;
+    private final int WIDTH = 28;
+    private final int HEIGHT = 28;
     // Todo: import the ejml matrix library
     // Todo: test the library and learn how to use it
     // multiply two matrices together
@@ -45,7 +47,12 @@ class NeuralNetwork {
     public void feedforward(File file) {
         // input_array
         // for each pixel in the image
-        //// input_array[i][j] = scale(greyscale(pixel))
+        // input_array[x][y] = scale(greyscale(pixel))
+
+        for(int y = 0; y < HEIGHT; y++) {
+            for(int x = 0; x < WIDTH; x++){
+            }
+        }
     }
 
     /*
@@ -75,13 +82,28 @@ class NeuralNetwork {
 
     /*
      * @return a value between 0 and 1 representing the brightness of a pixel
-     * (p >> 8) & 0xff - green
      * (p>>16) & 0xff - red
+     * (p >> 8) & 0xff - green
      * (p) & 0xff - blue
      * ( (0.3 * R) + (0.59 * G) + (0.11 * B) )
      */
-    private double greyscale() {
-        return 0;
+    private int greyscale(int RGB) {
+        int p = RGB;
+        int a = (p>>24)&0xff;
+        int r = (p>>16)&0xff;
+        int g = (p>>8)&0xff;
+        int b = p&0xff;
+        
+        //calculate average grayscale number
+        int avg = (r + g + b)/3;
+
+        a = (avg>>24)&0xff;
+        r = (avg>>16)&0xff;
+        g = (avg>>8)&0xff;
+        b = avg&0xff;
+
+        p = a | r | g | b;
+        return p;
     }
 
     /*
