@@ -15,11 +15,11 @@ class NeuralNetwork {
         // System.out.println(scale(20, 0, 255, 0, 1));
     }
     
-    private final int INPUTS = 28*28;
-    private final int HIDDEN = 15;
-    private final int OUTPUT = 10;
     private final int WIDTH = 28;
     private final int HEIGHT = 28;
+    private final int INPUTS = WIDTH*HEIGHT;
+    private final int HIDDEN = 15;
+    private final int OUTPUT = 10;
     
     // Todo: import the ejml matrix library
     // Todo: test the library and learn how to use it
