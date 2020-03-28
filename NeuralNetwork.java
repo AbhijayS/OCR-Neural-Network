@@ -42,6 +42,12 @@ class NeuralNetwork {
         // randomly initialize weight_matrix_1, weight_matrix_2, hidden_bias_array, output_bias_array
     }
 
+    public void feedforward(File file) {
+        // input_array
+        // for each pixel in the image
+        //// input_array[i][j] = scale(greyscale(pixel))
+    }
+
     /*
      * feedforward() function
      * computes the output for the given input
