@@ -1,5 +1,9 @@
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import org.ejml.data.Matrix;
+import org.ejml.simple.SimpleMatrix;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -10,8 +14,15 @@ class NeuralNetwork {
     private final int HIDDEN = 15;
     private final int OUTPUT = 10;
 
+    //initialize weight_matrix_1, weight_matrix_2, hidden_bias_array, output_bias_array
+    SimpleMatrix weight_matrix;
+
     public NeuralNetwork() {
+        // TODO ARSH
         // randomly initialize weight_matrix_1, weight_matrix_2, hidden_bias_array, output_bias_array
+        // weight_matrix rowsxcolumms HIDDENXINPUTS
+        // hidden_bias_array = HIDDEN X 1
+        // random(-1,1)
     }
 
     /*
@@ -21,9 +32,6 @@ class NeuralNetwork {
      * uses the hidden_array to compute values for the output
      */
     public double[] feedforward(File file) throws IOException {
-        // input_array
-        // for each pixel in the image
-        // input_array[x][y] = scale(greyscale(pixel))
         BufferedImage img = ImageIO.read(file);
         double[] inputArray = new double[INPUTS];
 
@@ -35,13 +43,6 @@ class NeuralNetwork {
             }
         }
 
-        for (double d : inputArray) {
-            System.out.println(d);
-        }
-
-        return inputArray;
-        
-        // TODO ARSH
         // weight_matrix_1 - HIDDEN X INPUTS
         /*    I1  I2  I3 ...
         * H1 W11 W12 W13...
@@ -49,7 +50,7 @@ class NeuralNetwork {
         * H3 W31 W32 W33...
         * ...
         */
-        // hidden_bias_array
+        hidden_array = (weight_matrix.mult(input_matrix)).plus(hidden_bias_array);
 
 
         // TODO ABHIJAY
@@ -57,6 +58,8 @@ class NeuralNetwork {
         // weight_matrix_2 - OUTPUT X HIDDEN
         // output_bias_array
         // output_array (O1, O2, O3, ...) - result of (weight_matrix_2)*(hidden_array)+(output_bias_array) using matrix math
+
+
     }
 
 
