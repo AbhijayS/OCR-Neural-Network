@@ -96,14 +96,7 @@ class NeuralNetwork {
         
         //calculate average grayscale number
         int avg = (r + g + b)/3;
-
-        a = (avg>>24)&0xff;
-        r = (avg>>16)&0xff;
-        g = (avg>>8)&0xff;
-        b = avg&0xff;
-
-        p = a | r | g | b;
-        return p;
+        return avg;
     }
 
     /*
