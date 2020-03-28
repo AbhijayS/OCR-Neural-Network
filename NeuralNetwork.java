@@ -80,9 +80,7 @@ class NeuralNetwork {
      * (p) & 0xff - blue
      * ( (0.3 * R) + (0.59 * G) + (0.11 * B) )
      */
-    private double greyscale() {
-        File file = new File("eight.jpg");
-        BufferedImage img = ImageIO.read(file);
+    private double greyscale(BufferedImage img) {
         int width = img.getWidth();
         int height = img.getHeight();
         for(int y = 0; y < height; y++) {
