@@ -46,7 +46,7 @@ class NeuralNetwork {
         }
 
         inputMatrix = new SimpleMatrix(inputArray);
-
+ 
         SimpleMatrix hiddenMatrix = (weightMatrixA.mult(inputMatrix)).plus(hiddenBiasMatrix);
 
         for (int i = 0; i < hiddenMatrix.numRows(); i++) {
