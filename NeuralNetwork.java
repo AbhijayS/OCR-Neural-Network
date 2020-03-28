@@ -88,7 +88,7 @@ class NeuralNetwork {
      * (p) & 0xff - blue
      * ( (0.3 * R) + (0.59 * G) + (0.11 * B) )
      */
-    private int greyscale(int RGB) {
+    private double greyscale(int RGB) {
         int p = RGB;
         int a = (p>>24)&0xff;
         int r = (p>>16)&0xff;
@@ -96,7 +96,7 @@ class NeuralNetwork {
         int b = p&0xff;
         
         //calculate average grayscale number
-        int avg = (0.3 * r) + (0.59 * g) + (0.11 * b)
+        double avg = (0.3 * r) + (0.59 * g) + (0.11 * b)
         return avg;
     }
 
