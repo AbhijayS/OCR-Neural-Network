@@ -5,7 +5,11 @@ class Main {
     public static void main(String[] args) throws IOException {
         NeuralNetwork network = new NeuralNetwork();
         
-        network.feedforward(new File("eight.jpg"));
+        double[] output = network.feedforward(new File("eight.jpg"));
+
+        for (double d : output) {
+            System.out.println(d);
+        }
 
         // network.feedforward(img)
         // print(network.output())
