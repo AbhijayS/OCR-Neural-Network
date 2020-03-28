@@ -2,6 +2,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import org.ejml.simple.SimpleMatrix;
+import java.util.Random;
 
 class NeuralNetwork {
     private final int WIDTH = 28;
@@ -10,8 +12,17 @@ class NeuralNetwork {
     private final int HIDDEN = 15;
     private final int OUTPUT = 10;
 
+    SimpleMatrix weight_matrix_1;
+    SimpleMatrix weight_matrix_2;
+    SimpleMatrix hidden_bias_array;
+    SimpleMatrix output_bias_array;
     public NeuralNetwork() {
         // randomly initialize weight_matrix_1, weight_matrix_2, hidden_bias_array, output_bias_array
+        Random rand = new Random();
+        weight_matrix_1 = new SimpleMatrix();
+        weight_matrix_2 = new SimpleMatrix();
+        hidden_bias_array = new SimpleMatrix();
+        output_bias_array = new SimpleMatrix();
     }
 
     /*
