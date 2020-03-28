@@ -5,7 +5,6 @@ import java.io.IOException;
 
 class NeuralNetwork {
     public static void main(String[] args) throws IOException{
-        
         File file = new File("eight.jpg");
         BufferedImage img = ImageIO.read(file);
         int width = img.getWidth();
@@ -19,9 +18,10 @@ class NeuralNetwork {
     private final int INPUTS = 28*28;
     private final int HIDDEN = 15;
     private final int OUTPUT = 10;
-    
     // Todo: import the ejml matrix library
     // Todo: test the library and learn how to use it
+    // multiply two matrices together
+    // add two matrices together
 
     // input_array(I1, I2, I3, ...)
     // weight_matrix_1 - HIDDEN X INPUTS
@@ -88,7 +88,9 @@ class NeuralNetwork {
      * Scales a value in one range to another
      * 0 - 255
      * 0 - 1
-     */
+     * x1 0 x2 255 y1 0 y2 1
+      */
+
     private double scale(double value, double x1, double x2, double y1, double y2) {
         double ratio = ((value-x1) / (x2-x1));
         double result = ((y2-y1)*ratio) + y1;
