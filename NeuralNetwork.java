@@ -16,7 +16,7 @@ class NeuralNetwork {
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
 
-    public NeuralNetwork(int[] layers) {
+    public NeuralNetwork() {
         Random rand = new Random();
 
         weightMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, rand);
