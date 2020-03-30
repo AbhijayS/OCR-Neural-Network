@@ -81,10 +81,10 @@ class NeuralNetwork {
       * train the neural network using MNIST data
       */
 
-    public SimpleMatrix train(int[] answers) {
-        double[][] inArray = new double[1][1];
+    public void train(int[] answers) {
+        double[][] inArray = new double[answers.length][1];
         for(int i = 0; i < answers.length; i++) {
-             inArray= new double[answers[i]][1];
+            inArray[i][1] = answers[i];
         }
         answersMatrix = new SimpleMatrix(inArray);
 
@@ -94,7 +94,7 @@ class NeuralNetwork {
 
         // calculate hidden errors
         errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
-
+    }
     /*
      * Sigmoid Function
      * Normalizes all real numbers to within 0 and 1
