@@ -82,7 +82,13 @@ class NeuralNetwork {
       */
 
     public void train(int[] answers) {
+
+        // calculate final errors
+
         
+
+        // calculate hidden errors
+        errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[0]);
     }
 
     /*
