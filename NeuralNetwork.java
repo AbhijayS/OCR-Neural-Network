@@ -18,8 +18,8 @@ class NeuralNetwork {
     SimpleMatrix hiddenBiasMatrix;
     SimpleMatrix outputBiasMatrix;
 
-    // weightMatrix[]
-    // biasMatrix[]
+    weightMatrix[];
+    biasMatrix[];
 
     public NeuralNetwork() {
         Random rand = new Random();
