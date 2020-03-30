@@ -98,7 +98,6 @@ class NeuralNetwork {
      */
     private double greyscale(int RGB) {
         int p = RGB;
-        int a = (p>>24)&0xff;
         int r = (p>>16)&0xff;
         int g = (p>>8)&0xff;
         int b = p&0xff;
