@@ -14,6 +14,7 @@ class NeuralNetwork {
 
     SimpleMatrix inputMatrix;
     SimpleMatrix answersMatrix;
+    SimpleMatrix outputMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
     SimpleMatrix[] errorMatrices;
@@ -89,7 +90,7 @@ class NeuralNetwork {
         answersMatrix = new SimpleMatrix(inArray);
 
         // calculate final errors
-
+        errorMatrices[1] = answersMatrix.minus(outputMatrix);
 
 
         // calculate hidden errors
