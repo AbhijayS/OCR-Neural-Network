@@ -81,8 +81,13 @@ class NeuralNetwork {
       * train the neural network using MNIST data
       */
 
-    public void train(int[] answers) {
-        
+    public SimpleMatrix train(int[] answers) {
+        double[][] inArray = new double[1][1];
+        for(int i = 0; i < answers.length; i++) {
+             inArray= new double[answers[i]][1];
+        }
+        answersMatrix = new SimpleMatrix(inArray);
+        return answersMatrix;
     }
 
     /*
