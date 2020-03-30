@@ -13,21 +13,16 @@ class NeuralNetwork {
     private final int OUTPUTS = 10;
 
     SimpleMatrix inputMatrix;
-    SimpleMatrix weightMatrixA;
-    SimpleMatrix weightMatrixB;
-    SimpleMatrix hiddenBiasMatrix;
-    SimpleMatrix outputBiasMatrix;
+    SimpleMatrix[] weightMatrices;
+    SimpleMatrix[] biasMatrices;
 
-    // weightMatrix[]
-    // biasMatrix[]
-
-    public NeuralNetwork() {
+    public NeuralNetwork(int[] layers) {
         Random rand = new Random();
 
-        weightMatrixA = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, rand);
-        weightMatrixB = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, rand);
-        hiddenBiasMatrix = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
-        outputBiasMatrix = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
+        weightMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, rand);
+        weightMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, rand);
+        biasMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
+        biasMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
     }
 
     /*
@@ -50,14 +45,14 @@ class NeuralNetwork {
 
         inputMatrix = new SimpleMatrix(inputArray);
  
-        SimpleMatrix hiddenMatrix = (weightMatrixA.mult(inputMatrix)).plus(hiddenBiasMatrix);
+        SimpleMatrix hiddenMatrix = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);
 
         for (int i = 0; i < hiddenMatrix.numRows(); i++) {
             double value = sigmoid(hiddenMatrix.get(i,0));
             hiddenMatrix.set(i,0,value);
         }
 
-        SimpleMatrix outputMatrix = (weightMatrixB.mult(hiddenMatrix)).plus(outputBiasMatrix);
+        SimpleMatrix outputMatrix = (weightMatrices[1].mult(hiddenMatrix)).plus(biasMatrices[1]);
 
         for (int i = 0; i < outputMatrix.numRows(); i++) {
             double value = sigmoid(outputMatrix.get(i,0));
