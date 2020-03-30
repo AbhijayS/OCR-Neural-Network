@@ -13,8 +13,10 @@ class NeuralNetwork {
     private final int OUTPUTS = 10;
 
     SimpleMatrix inputMatrix;
+    SimpleMatrix answersMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
+    SimpleMatrix[] errorMatrices;
 
     public NeuralNetwork() {
         Random rand = new Random();
@@ -78,6 +80,10 @@ class NeuralNetwork {
      /*
       * train the neural network using MNIST data
       */
+
+    public void train(int[] answers) {
+        
+    }
 
     /*
      * Sigmoid Function
