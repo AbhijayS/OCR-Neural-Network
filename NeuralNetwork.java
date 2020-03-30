@@ -87,8 +87,13 @@ class NeuralNetwork {
              inArray= new double[answers[i]][1];
         }
         answersMatrix = new SimpleMatrix(inArray);
-        return answersMatrix;
-    }
+
+        // calculate final errors
+
+
+
+        // calculate hidden errors
+        errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
 
     /*
      * Sigmoid Function
