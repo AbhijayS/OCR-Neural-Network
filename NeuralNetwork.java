@@ -13,8 +13,11 @@ class NeuralNetwork {
     private final int OUTPUTS = 10;
 
     SimpleMatrix inputMatrix;
+    SimpleMatrix answersMatrix;
+    SimpleMatrix outputMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
+    SimpleMatrix[] errorMatrices;
 
     public NeuralNetwork() {
         Random rand = new Random();
@@ -79,6 +82,20 @@ class NeuralNetwork {
       * train the neural network using MNIST data
       */
 
+    public void train(int[] answers) {
+        double[][] inArray = new double[answers.length][1];
+        for(int i = 0; i < answers.length; i++) {
+            inArray[i][1] = answers[i];
+        }
+        answersMatrix = new SimpleMatrix(inArray);
+
+        // calculate final errors
+        errorMatrices[1] = answersMatrix.minus(outputMatrix);
+
+
+        // calculate hidden errors
+        errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
+    }
     /*
      * Sigmoid Function
      * Normalizes all real numbers to within 0 and 1
