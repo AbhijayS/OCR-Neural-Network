@@ -13,6 +13,7 @@ class NeuralNetwork {
     private final int INPUTS = WIDTH*HEIGHT;
     private final int HIDDEN = 15;
     private final int OUTPUTS = 10;
+    private final double LR = 0.1;
 
     SimpleMatrix inputMatrix;
     SimpleMatrix answersMatrix;
@@ -73,6 +74,8 @@ class NeuralNetwork {
         for (int i = 0; i < OUTPUTS; i++) {
             outputArray[i] = outputMatrices[1].get(i,0);
         }
+
+        
 
         return outputArray;
     }
