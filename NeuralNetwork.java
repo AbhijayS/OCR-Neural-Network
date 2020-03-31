@@ -1,7 +1,6 @@
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-import org.ejml.equation.Equation;
 import org.ejml.simple.SimpleMatrix;
 import java.io.File;
 import java.io.IOException;
