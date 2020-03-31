@@ -75,19 +75,6 @@ class NeuralNetwork {
             outputArray[i] = outputMatrices[1].get(i,0);
         }
 
-        for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
-            for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
-                double value = deltaWeightMatrices[0].get(i,j) * -LR;
-                deltaWeightMatrices[0].set(i,j,value);
-            }
-        }
-        for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
-            for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
-                double value = deltaWeightMatrices[1].get(i,j) * -LR;
-                deltaWeightMatrices[1].set(i,j,value);
-            }
-        }
-
         return outputArray;
     }
 
@@ -135,13 +122,24 @@ class NeuralNetwork {
         deltaWeightMatrices[1] = deltaWeightMatrices[1].mult(outputMatrices[0].transpose());
 
         // step 4
-
+        for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
+            for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
+                double value = deltaWeightMatrices[0].get(i,j) * -LR;
+                deltaWeightMatrices[0].set(i,j,value);
+            }
+        }
+        for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
+            for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
+                double value = deltaWeightMatrices[1].get(i,j) * -LR;
+                deltaWeightMatrices[1].set(i,j,value);
+            }
+        }
 
         // step 5
         weightMatrices[0].plus(deltaWeightMatrices[0]);
         weightMatrices[1].plus(deltaWeightMatrices[1]);
     }
-    
+
     /*
      * Sigmoid Function
      * Normalizes all real numbers to within 0 and 1
