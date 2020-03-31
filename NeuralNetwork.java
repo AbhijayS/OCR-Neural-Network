@@ -14,10 +14,10 @@ class NeuralNetwork {
 
     SimpleMatrix inputMatrix;
     SimpleMatrix answersMatrix;
-    SimpleMatrix outputMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
     SimpleMatrix[] errorMatrices;
+    SimpleMatrix[] outputMatrices;
 
     public NeuralNetwork() {
         Random rand = new Random();
@@ -26,6 +26,7 @@ class NeuralNetwork {
         weightMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, rand);
         biasMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
         biasMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
+        outputMatrices = new SimpleMatrix[2];
     }
 
     /*
@@ -48,24 +49,24 @@ class NeuralNetwork {
 
         inputMatrix = new SimpleMatrix(inputArray);
  
-        SimpleMatrix hiddenMatrix = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);
+        outputMatrices[0] = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);
 
-        for (int i = 0; i < hiddenMatrix.numRows(); i++) {
-            double value = sigmoid(hiddenMatrix.get(i,0));
-            hiddenMatrix.set(i,0,value);
+        for (int i = 0; i < outputMatrices[0].numRows(); i++) {
+            double value = sigmoid(outputMatrices[0].get(i,0));
+            outputMatrices[0].set(i,0,value);
         }
 
-        SimpleMatrix outputMatrix = (weightMatrices[1].mult(hiddenMatrix)).plus(biasMatrices[1]);
+        outputMatrices[1] = (weightMatrices[1].mult(outputMatrices[0])).plus(biasMatrices[1]);
 
-        for (int i = 0; i < outputMatrix.numRows(); i++) {
-            double value = sigmoid(outputMatrix.get(i,0));
-            outputMatrix.set(i,0,value);
+        for (int i = 0; i < outputMatrices[1].numRows(); i++) {
+            double value = sigmoid(outputMatrices[1].get(i,0));
+            outputMatrices[1].set(i,0,value);
         }
 
         double[] outputArray = new double[OUTPUTS];
 
         for (int i = 0; i < OUTPUTS; i++) {
-            outputArray[i] = outputMatrix.get(i,0);
+            outputArray[i] = outputMatrices[1].get(i,0);
         }
 
         return outputArray;
@@ -90,7 +91,7 @@ class NeuralNetwork {
         answersMatrix = new SimpleMatrix(inArray);
 
         // calculate final errors
-        errorMatrices[1] = answersMatrix.minus(outputMatrix);
+        errorMatrices[1] = answersMatrix.minus(outputMatrices[1]);
 
 
         // calculate hidden errors
