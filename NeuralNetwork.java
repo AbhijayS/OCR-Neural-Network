@@ -75,7 +75,18 @@ class NeuralNetwork {
             outputArray[i] = outputMatrices[1].get(i,0);
         }
 
-        
+        for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
+            for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
+                double value = deltaWeightMatrices[0].get(i,j) * -LR;
+                deltaWeightMatrices[0].set(i,j,value);
+            }
+        }
+        for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
+            for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
+                double value = deltaWeightMatrices[1].get(i,j) * -LR;
+                deltaWeightMatrices[1].set(i,j,value);
+            }
+        }
 
         return outputArray;
     }
