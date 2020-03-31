@@ -1,5 +1,7 @@
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import org.ejml.equation.Equation;
 import org.ejml.simple.SimpleMatrix;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,8 @@ class NeuralNetwork {
     SimpleMatrix[] biasMatrices;
     SimpleMatrix[] errorMatrices;
     SimpleMatrix[] outputMatrices;
+    SimpleMatrix[] deltaWeightMatrices;
+
 
     public NeuralNetwork() {
         Random rand = new Random();
@@ -27,6 +31,7 @@ class NeuralNetwork {
         biasMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
         biasMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
         outputMatrices = new SimpleMatrix[2];
+        deltaWeightMatrices = new SimpleMatrix[2];
     }
 
     /*
@@ -96,6 +101,15 @@ class NeuralNetwork {
 
         // calculate hidden errors
         errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
+
+
+        // deltaWeightMatrices[0] = errorMatrices[0] · dsigmoid(outputMatrices[0])
+        // deltaWeightMatrices[1] = errorMatrices[1] · dsigmoid(outputMatrices[1])
+        SimpleMatrix copyMatrixZero = outputMatrices[0].copy();
+        SimpleMatrix copyMatrixOne = outputMatrices[1].copy();
+        for(int i = 0; i < outputMatrices[0].numRows(); i++) {
+            
+        }
     }
     /*
      * Sigmoid Function
@@ -103,6 +117,13 @@ class NeuralNetwork {
      */
     private double sigmoid(double value) {
         return 1/(1 + Math.exp(-value));
+    }
+
+    /*
+     * Special derivative of the sigmoid function
+     */
+    private double dsigmoid(double value) {
+        return value * (1-value);
     }
 
     /*
