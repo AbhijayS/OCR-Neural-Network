@@ -10,11 +10,7 @@ class Main {
         for (double d : output) {
             System.out.println(d);
         }
-
-        // network.feedforward(img)
-        // print(network.output())
-
-        // network.train()
-
+        
+        network.train(new int[]{0,0,0,0,0,0,0,0,1,0});
     }
 }

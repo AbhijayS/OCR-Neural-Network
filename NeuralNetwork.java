@@ -25,14 +25,17 @@ class NeuralNetwork {
 
 
     public NeuralNetwork() {
+        weightMatrices = new SimpleMatrix[2];
+        biasMatrices = new SimpleMatrix[2];
+        outputMatrices = new SimpleMatrix[2];
+        deltaWeightMatrices = new SimpleMatrix[2];
+        errorMatrices = new SimpleMatrix[2];
+        
         Random rand = new Random();
-
         weightMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, rand);
         weightMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, rand);
         biasMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
         biasMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
-        outputMatrices = new SimpleMatrix[2];
-        deltaWeightMatrices = new SimpleMatrix[2];
     }
 
     /*
@@ -92,7 +95,7 @@ class NeuralNetwork {
     public void train(int[] answers) {
         double[][] inArray = new double[answers.length][1];
         for(int i = 0; i < answers.length; i++) {
-            inArray[i][1] = answers[i];
+            inArray[i][0] = answers[i];
         }
         answersMatrix = new SimpleMatrix(inArray);
 
@@ -113,8 +116,8 @@ class NeuralNetwork {
         for(int i = 0; i < copyMatrixOne.numRows(); i++) {
             copyMatrixOne.set(i,0,dsigmoid(copyMatrixOne.get(i,0)));
         }
-        deltaWeightMatrices[0] = errorMatrices[0].mult(copyMatrixZero);
-        deltaWeightMatrices[1] = errorMatrices[1].mult(copyMatrixOne);
+        deltaWeightMatrices[0] = errorMatrices[0].elementMult(copyMatrixZero);
+        deltaWeightMatrices[1] = errorMatrices[1].elementMult(copyMatrixOne);
 
         // deltaWeightMatrices[0] *= transpose(inputMatrix)
         // deltaWeightMatrices[1] *= transpose(outputMatrices[0])
@@ -136,8 +139,8 @@ class NeuralNetwork {
         }
 
         // step 5
-        weightMatrices[0].plus(deltaWeightMatrices[0]);
-        weightMatrices[1].plus(deltaWeightMatrices[1]);
+        weightMatrices[0] = weightMatrices[0].plus(deltaWeightMatrices[0]);
+        weightMatrices[1] = weightMatrices[1].plus(deltaWeightMatrices[1]);
     }
 
     /*
