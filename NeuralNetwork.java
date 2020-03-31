@@ -112,7 +112,6 @@ class NeuralNetwork {
         // calculate final errors
         errorMatrices[1] = answersMatrix.minus(outputMatrices[1]);
 
-
         // calculate hidden errors
         errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
 
@@ -121,10 +120,28 @@ class NeuralNetwork {
         // deltaWeightMatrices[1] = errorMatrices[1] · dsigmoid(outputMatrices[1])
         SimpleMatrix copyMatrixZero = outputMatrices[0].copy();
         SimpleMatrix copyMatrixOne = outputMatrices[1].copy();
-        for(int i = 0; i < outputMatrices[0].numRows(); i++) {
-            
+        for(int i = 0; i < copyMatrixZero.numRows(); i++) {
+            copyMatrixZero.set(i,0,dsigmoid(copyMatrixZero.get(i,0)));
         }
+        for(int i = 0; i < copyMatrixOne.numRows(); i++) {
+            copyMatrixOne.set(i,0,dsigmoid(copyMatrixOne.get(i,0)));
+        }
+        deltaWeightMatrices[0] = errorMatrices[0].mult(copyMatrixZero);
+        deltaWeightMatrices[1] = errorMatrices[1].mult(copyMatrixOne);
+
+        // deltaWeightMatrices[0] *= transpose(inputMatrix)
+        // deltaWeightMatrices[1] *= transpose(outputMatrices[0])
+        deltaWeightMatrices[0] = deltaWeightMatrices[0].mult(inputMatrix.transpose());
+        deltaWeightMatrices[1] = deltaWeightMatrices[1].mult(outputMatrices[0].transpose());
+
+        // step 4
+
+
+        // step 5
+        weightMatrices[0].plus(deltaWeightMatrices[0]);
+        weightMatrices[1].plus(deltaWeightMatrices[1]);
     }
+    
     /*
      * Sigmoid Function
      * Normalizes all real numbers to within 0 and 1
