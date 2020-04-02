@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import org.ejml.simple.SimpleMatrix;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 
 class NeuralNetwork {
