@@ -15,7 +15,6 @@ class NeuralNetwork {
     private final double LR = 0.1;
 
     SimpleMatrix inputMatrix;
-    SimpleMatrix answersMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
     SimpleMatrix[] errorMatrices;
@@ -91,12 +90,15 @@ class NeuralNetwork {
       * train the neural network using MNIST data
       */
 
-    public void train(int[] answers) {
+    public void train(File input, int[] answers) throws IOException {
+        feedforward(input);
+
+        // convert answers array to a 1D matrix
         double[][] inArray = new double[answers.length][1];
         for(int i = 0; i < answers.length; i++) {
             inArray[i][0] = answers[i];
         }
-        answersMatrix = new SimpleMatrix(inArray);
+        SimpleMatrix answersMatrix = new SimpleMatrix(inArray);
 
         // calculate final errors
         errorMatrices[1] = answersMatrix.minus(outputMatrices[1]);
