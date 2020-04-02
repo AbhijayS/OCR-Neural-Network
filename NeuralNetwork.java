@@ -43,40 +43,40 @@ class NeuralNetwork {
      * uses the hidden_array to compute values for the output
      */
     public double[] feedforward(File file) throws IOException {
-        BufferedImage img = ImageIO.read(file);
-        double[][] inputArray = new double[INPUTS][1];
+        BufferedImage img = ImageIO.read(file);                                                 //Create "img" of BufferedImage type that reads in 28x28 image file 
+        double[][] inputArray = new double[INPUTS][1];                                          //Create 2d array "inputArray" with size INPUTS in 1 column
 
         int count = 0;
-        for(int y = 0; y < HEIGHT; y++) {
+        for(int y = 0; y < HEIGHT; y++) {                                                       //Nested for loop that loops over height and width of image
             for(int x = 0; x < WIDTH; x++){
-                inputArray[count][0] = scale(greyscale(img.getRGB(x, y)), 0, 255, 0, 1);
+                inputArray[count][0] = scale(greyscale(img.getRGB(x, y)), 0, 255, 0, 1);        //Gets scaled greyscale value of img to get a value between 0 and 1 and sets it to inputArray
                 count++;
             }
         }
 
-        inputMatrix = new SimpleMatrix(inputArray);
+        inputMatrix = new SimpleMatrix(inputArray);                                             //Create inputMatrix of SimpleMatrix type using inputArray
  
-        outputMatrices[0] = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);
+        outputMatrices[0] = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);        //Set the product of weightMatrices[0] and inputMatrix[0] plus biasMatrices[0] of hidden layer to outputMatrices[0]
 
-        for (int i = 0; i < outputMatrices[0].numRows(); i++) {
-            double value = sigmoid(outputMatrices[0].get(i,0));
-            outputMatrices[0].set(i,0,value);
+        for (int i = 0; i < outputMatrices[0].numRows(); i++) {                                 //For loop that loops over outputMatrices[0]
+            double value = sigmoid(outputMatrices[0].get(i,0));                                 //Sets the sigmoid of the value of hidden layer output matrix to the double value.
+            outputMatrices[0].set(i,0,value);                                                   //New value of sigmoid function set back into hidden layer output matrix
         }
 
-        outputMatrices[1] = (weightMatrices[1].mult(outputMatrices[0])).plus(biasMatrices[1]);
+        outputMatrices[1] = (weightMatrices[1].mult(outputMatrices[0])).plus(biasMatrices[1]);  //Set the product of weightMatrices[1] and inputMatrix[1] plus biasMatrices[1] of hidden layer to outputMatrices[1]
 
-        for (int i = 0; i < outputMatrices[1].numRows(); i++) {
-            double value = sigmoid(outputMatrices[1].get(i,0));
-            outputMatrices[1].set(i,0,value);
+        for (int i = 0; i < outputMatrices[1].numRows(); i++) {                                 //For loop that loops over outputMatrices[1]
+            double value = sigmoid(outputMatrices[1].get(i,0));                                 //Sets the sigmoid of the value of output layer matrix to the double value.
+            outputMatrices[1].set(i,0,value);                                                   //New value of sigmoid function set back into output layer matrix
         }
 
-        double[] outputArray = new double[OUTPUTS];
+        double[] outputArray = new double[OUTPUTS];                                             //Create outputArray of double array type with size OUTPUTS
 
-        for (int i = 0; i < OUTPUTS; i++) {
-            outputArray[i] = outputMatrices[1].get(i,0);
+        for (int i = 0; i < OUTPUTS; i++) {                                                     //For loop that loops over OUTPUTS
+            outputArray[i] = outputMatrices[1].get(i,0);                                        //Get the output layer matrix values and set them at each outputArray index
         }
 
-        return outputArray;
+        return outputArray;                                                                     //Return outputArray
     }
 
 
