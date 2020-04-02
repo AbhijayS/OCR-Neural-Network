@@ -88,7 +88,7 @@ class NeuralNetwork {
      */
 
     public void train(File input, int[] answers) throws IOException {
-        System.out.println(Arrays.toString(feedforward(input)));
+        feedforward(input);
 
         /* convert the answers array to a 1D matrix */
         double[][] inArray = new double[answers.length][1];
@@ -139,20 +139,20 @@ class NeuralNetwork {
         /* multiply all deltas by the learning rate */
         for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
-                double value = deltaWeightMatrices[0].get(i,j) * LR;
+                double value = deltaWeightMatrices[0].get(i,j) * -LR;
                 deltaWeightMatrices[0].set(i,j,value);
             }
         }
         for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
-                double value = deltaWeightMatrices[1].get(i,j) * LR;
+                double value = deltaWeightMatrices[1].get(i,j) * -LR;
                 deltaWeightMatrices[1].set(i,j,value);
             }
         }
 
         /* modify the weights */
-        weightMatrices[0] = weightMatrices[0].minus(deltaWeightMatrices[0]);
-        weightMatrices[1] = weightMatrices[1].minus(deltaWeightMatrices[1]);
+        weightMatrices[0] = weightMatrices[0].plus(deltaWeightMatrices[0]);
+        weightMatrices[1] = weightMatrices[1].plus(deltaWeightMatrices[1]);
     }
 
     /*
