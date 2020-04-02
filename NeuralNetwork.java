@@ -81,34 +81,40 @@ class NeuralNetwork {
 
 
     /*
-     * train() function
-     * use backpropagation to tune the weights and bias matrices
-     * details coming soon
+     * This method adjusts the weights and biases based on the input and answers
+     * using the backpropagation algorithm, otherwise known as gradient descent.
+     * @param input 28x28 pixel image file representing the input data
+     * @param answers boolean representing numbers 0-9
      */
-    
-     /*
-      * train the neural network using MNIST data
-      */
 
-    public void train(File input, int[] answers) throws IOException {
+    public void train(File input, boolean[] answers) throws IOException {
         feedforward(input);
 
-        // convert answers array to a 1D matrix
+        /* convert the answers array to a 1D matrix */
         double[][] inArray = new double[answers.length][1];
         for(int i = 0; i < answers.length; i++) {
-            inArray[i][0] = answers[i];
+            inArray[i][0] = answers[i] ? 1 : 0;
         }
         SimpleMatrix answersMatrix = new SimpleMatrix(inArray);
 
-        // calculate final errors
-        errorMatrices[1] = answersMatrix.minus(outputMatrices[1]);
+        /*
+         * calculate and store errors in the output layer
+         * outputError = output - answer
+         */
+        errorMatrices[1] = outputMatrices[1].minus(answersMatrix);
 
-        // calculate hidden errors
+        /*
+         * calculate and store errors in the hidden layer
+         * based on the error in the output layer
+         * hiddenError = transpose(weights) * outputError
+         */
         errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
 
 
-        // deltaWeightMatrices[0] = errorMatrices[0] · dsigmoid(outputMatrices[0])
-        // deltaWeightMatrices[1] = errorMatrices[1] · dsigmoid(outputMatrices[1])
+        /*
+         * deltaWeightMatrices[0] = errorMatrices[0] ⊙ dsigmoid(outputMatrices[0])
+         * deltaWeightMatrices[1] = errorMatrices[1] ⊙ dsigmoid(outputMatrices[1])
+         */
         SimpleMatrix copyMatrixZero = outputMatrices[0].copy();
         SimpleMatrix copyMatrixOne = outputMatrices[1].copy();
         for(int i = 0; i < copyMatrixZero.numRows(); i++) {
@@ -120,12 +126,14 @@ class NeuralNetwork {
         deltaWeightMatrices[0] = errorMatrices[0].elementMult(copyMatrixZero);
         deltaWeightMatrices[1] = errorMatrices[1].elementMult(copyMatrixOne);
 
-        // deltaWeightMatrices[0] *= transpose(inputMatrix)
-        // deltaWeightMatrices[1] *= transpose(outputMatrices[0])
+        /*
+         * deltaWeightMatrices[0] *= transpose(inputMatrix)
+         * deltaWeightMatrices[1] *= transpose(outputMatrices[0])
+         */
         deltaWeightMatrices[0] = deltaWeightMatrices[0].mult(inputMatrix.transpose());
         deltaWeightMatrices[1] = deltaWeightMatrices[1].mult(outputMatrices[0].transpose());
 
-        // step 4
+        /* multiply all deltas by the learning rate */
         for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
                 double value = deltaWeightMatrices[0].get(i,j) * -LR;
@@ -139,7 +147,7 @@ class NeuralNetwork {
             }
         }
 
-        // step 5
+        /* modify the weights */
         weightMatrices[0] = weightMatrices[0].plus(deltaWeightMatrices[0]);
         weightMatrices[1] = weightMatrices[1].plus(deltaWeightMatrices[1]);
     }
