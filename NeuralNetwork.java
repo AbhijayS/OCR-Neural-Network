@@ -21,7 +21,6 @@ class NeuralNetwork {
     SimpleMatrix[] outputMatrices;
     SimpleMatrix[] deltaWeightMatrices;
 
-
     public NeuralNetwork() {
         weightMatrices = new SimpleMatrix[2];
         biasMatrices = new SimpleMatrix[2];
@@ -110,7 +109,6 @@ class NeuralNetwork {
          */
         errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
 
-
         /*
          * deltaWeightMatrices[0] = errorMatrices[0] ⊙ dsigmoid(outputMatrices[0])
          * deltaWeightMatrices[1] = errorMatrices[1] ⊙ dsigmoid(outputMatrices[1])
@@ -125,6 +123,10 @@ class NeuralNetwork {
         }
         deltaWeightMatrices[0] = errorMatrices[0].elementMult(copyMatrixZero);
         deltaWeightMatrices[1] = errorMatrices[1].elementMult(copyMatrixOne);
+
+        /* modify the biases */
+        biasMatrices[0] = biasMatrices[0].plus(deltaWeightMatrices[0]);
+        biasMatrices[1] = biasMatrices[1].plus(deltaWeightMatrices[1]);
 
         /*
          * deltaWeightMatrices[0] *= transpose(inputMatrix)
