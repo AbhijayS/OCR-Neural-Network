@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import org.ejml.simple.SimpleMatrix;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 class NeuralNetwork {
@@ -86,13 +87,13 @@ class NeuralNetwork {
      * @param answers boolean representing numbers 0-9
      */
 
-    public void train(File input, boolean[] answers) throws IOException {
-        feedforward(input);
+    public void train(File input, int[] answers) throws IOException {
+        System.out.println(Arrays.toString(feedforward(input)));
 
         /* convert the answers array to a 1D matrix */
         double[][] inArray = new double[answers.length][1];
         for(int i = 0; i < answers.length; i++) {
-            inArray[i][0] = answers[i] ? 1 : 0;
+            inArray[i][0] = answers[i];
         }
         SimpleMatrix answersMatrix = new SimpleMatrix(inArray);
 
@@ -138,20 +139,20 @@ class NeuralNetwork {
         /* multiply all deltas by the learning rate */
         for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
-                double value = deltaWeightMatrices[0].get(i,j) * -LR;
+                double value = deltaWeightMatrices[0].get(i,j) * LR;
                 deltaWeightMatrices[0].set(i,j,value);
             }
         }
         for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
-                double value = deltaWeightMatrices[1].get(i,j) * -LR;
+                double value = deltaWeightMatrices[1].get(i,j) * LR;
                 deltaWeightMatrices[1].set(i,j,value);
             }
         }
 
         /* modify the weights */
-        weightMatrices[0] = weightMatrices[0].plus(deltaWeightMatrices[0]);
-        weightMatrices[1] = weightMatrices[1].plus(deltaWeightMatrices[1]);
+        weightMatrices[0] = weightMatrices[0].minus(deltaWeightMatrices[0]);
+        weightMatrices[1] = weightMatrices[1].minus(deltaWeightMatrices[1]);
     }
 
     /*

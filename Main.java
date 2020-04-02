@@ -6,12 +6,9 @@ class Main {
         NeuralNetwork network = new NeuralNetwork();
         File eight = new File("eight.jpg");
 
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
+        for (int i = 0; i < 100; i++) {
+            network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
+        }
         
         double[] outputs = network.feedforward(eight);
     }
