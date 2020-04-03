@@ -46,8 +46,6 @@ class NeuralNetwork {
             double value = scale(greyscale(imageArray[i].getRGB()), 0, 255, 0, 1);
             inputMatrix.set(i, value);
         }
-
-        System.out.println(inputMatrix);
  
         outputMatrices[0] = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);        //Set the product of weightMatrices[0] and inputMatrix[0] plus biasMatrices[0] of hidden layer to outputMatrices[0]
 
