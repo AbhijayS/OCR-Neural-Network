@@ -29,7 +29,10 @@ class Main {
 
         for (int i = 0; i < NUM_IMAGES; i++) {
             // create the answers array for every label
+            int[] answersArray = new int[10];
             // get the image from buffer
+            Color[] imageArray = getImageFromBuffer(imageByteBuffer, i);
+            
             network.train(getImageFromBuffer(imageByteBuffer, IMAGE_ID), new int[] {0,0,0,0,0,1,0,0,0,0});
             IMAGE_ID++;
         }
@@ -70,6 +73,10 @@ class Main {
     }
 
     static int[] getAnswersArrayFromBuffer(ByteBuffer buffer, int imageIndex) {
-        return __;
+        int[] answersArray = new int[10];
+        for(int i = 0; i < 10; i++) {
+            answersArray[i] = buffer.get(imageIndex+LABEL_START_INDEX+i);
+        }
+        return answersArray;
     }
 }
