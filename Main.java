@@ -1,17 +1,28 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import javax.imageio.ImageIO;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 class Main {
-    public static void main(String[] args) throws IOException {
+    static final int IMAGE_SIZE = 784;
+    static final int START_INDEX = 16;
+    public static void main(String[] args) throws Exception {
         NeuralNetwork network = new NeuralNetwork();
-        File eight = new File("eight.jpg");
+        InputStream inputStream = new FileInputStream(new File("train-images.idx3-ubyte"));
+        ByteBuffer byteBuffer = ByteBuffer.wrap(inputStream.readAllBytes());
 
-        for (int i = 0; i < 1000; i++) {
-            network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
-        }
+        int IMAGE_ID = 0;
 
-        double[] outputs = network.feedforward(eight);
+        outputImage(byteBuffer, IMAGE_ID, "five");
+        
+        double[] outputs = network.feedforward(getImageFromBuffer(byteBuffer, IMAGE_ID));
 
         int index = 0;
         double max = 0;
@@ -23,5 +34,26 @@ class Main {
             }
         }
         System.out.println("\nIt's " + (index));
+    }
+
+    static void outputImage(ByteBuffer buffer, int imageIndex, String fileName) throws Exception {
+        Color[] imageArray = getImageFromBuffer(buffer, imageIndex);
+        int[] rgb = new int[imageArray.length];
+        for (int i = 0; i < imageArray.length; i++) {
+            rgb[i] = imageArray[i].getRGB();
+        }
+        BufferedImage image = new BufferedImage(28,28,BufferedImage.TYPE_INT_RGB);
+        image.setRGB(0, 0, 28, 28, rgb, 0, 28);
+        File output = new File(fileName+".jpg");
+        ImageIO.write(image, "jpg", output);
+    }
+
+    static Color[] getImageFromBuffer(ByteBuffer buffer, int imageIndex) {
+        Color[] image = new Color[IMAGE_SIZE];
+        for (int i = 0; i < IMAGE_SIZE; i++) {
+            int c = buffer.get((imageIndex*IMAGE_SIZE)+START_INDEX+i)&0xFF;
+            image[i] = new Color(c, c, c);
+        }
+        return image;
     }
 }

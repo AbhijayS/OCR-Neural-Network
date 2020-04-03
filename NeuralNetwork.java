@@ -5,6 +5,7 @@ import org.ejml.simple.SimpleMatrix;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.awt.*;
 
 class NeuralNetwork {
     private final int WIDTH = 28;
@@ -31,25 +32,22 @@ class NeuralNetwork {
         biasMatrices[1] = new SimpleMatrix(OUTPUTS, 1);
     }
 
-    /*
-     * feedforward() function
-     * computes the output for the given input
-     * uses the matrix library to compute the values for the hidden_array
-     * uses the hidden_array to compute values for the output
+    /**
+     * Computes the output for the given input using the feedforward algorithm
+     * for each layer in the neural network.
+     * output = sigmoid (weights*input + bias)     
+     * @param imageArray color representation of the 28x28 pixel image in a row-wise format
+     * @return probability values for all numbers between 0-9 inclusive
      */
-    public double[] feedforward(File file) throws IOException {
-        BufferedImage img = ImageIO.read(file);                                                 //Create "img" of BufferedImage type that reads in 28x28 image file 
-        double[][] inputArray = new double[INPUTS][1];                                          //Create 2d array "inputArray" with size INPUTS in 1 column
+    public double[] feedforward(Color[] imageArray) {
+        inputMatrix = new SimpleMatrix(INPUTS,1);
 
-        int count = 0;
-        for(int y = 0; y < HEIGHT; y++) {                                                       //Nested for loop that loops over height and width of image
-            for(int x = 0; x < WIDTH; x++){
-                inputArray[count][0] = scale(greyscale(img.getRGB(x, y)), 0, 255, 0, 1);        //Gets scaled greyscale value of img to get a value between 0 and 1 and sets it to inputArray
-                count++;
-            }
+        for (int i = 0; i < imageArray.length; i++) {
+            double value = scale(greyscale(imageArray[i].getRGB()), 0, 255, 0, 1);
+            inputMatrix.set(i, value);
         }
 
-        inputMatrix = new SimpleMatrix(inputArray);                                             //Create inputMatrix of SimpleMatrix type using inputArray
+        System.out.println(inputMatrix);
  
         outputMatrices[0] = (weightMatrices[0].mult(inputMatrix)).plus(biasMatrices[0]);        //Set the product of weightMatrices[0] and inputMatrix[0] plus biasMatrices[0] of hidden layer to outputMatrices[0]
 
@@ -81,8 +79,8 @@ class NeuralNetwork {
      * @param input 28x28 pixel image file representing the input data
      * @param answers boolean representing numbers 0-9
      */
-    public void train(File input, int[] answers) throws IOException {
-        feedforward(input);
+    public void train(Color[] imageArray, int[] answers) throws IOException {
+        feedforward(imageArray);
 
         /* convert the answers array to a 1D matrix */
         double[][] inArray = new double[answers.length][1];
