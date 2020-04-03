@@ -17,22 +17,18 @@ class NeuralNetwork {
     SimpleMatrix inputMatrix;
     SimpleMatrix[] weightMatrices;
     SimpleMatrix[] biasMatrices;
-    SimpleMatrix[] errorMatrices;
     SimpleMatrix[] outputMatrices;
-    SimpleMatrix[] deltaWeightMatrices;
 
     public NeuralNetwork() {
         weightMatrices = new SimpleMatrix[2];
         biasMatrices = new SimpleMatrix[2];
         outputMatrices = new SimpleMatrix[2];
-        deltaWeightMatrices = new SimpleMatrix[2];
-        errorMatrices = new SimpleMatrix[2];
         
-        Random rand = new Random();
-        weightMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, rand);
-        weightMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, rand);
-        biasMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, 1, -1, 1, rand);
-        biasMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, 1, -1, 1, rand);
+        
+        weightMatrices[0] = SimpleMatrix.random_DDRM(HIDDEN, INPUTS, -1, 1, new Random());
+        weightMatrices[1] = SimpleMatrix.random_DDRM(OUTPUTS, HIDDEN, -1, 1, new Random());
+        biasMatrices[0] = new SimpleMatrix(HIDDEN, 1);
+        biasMatrices[1] = new SimpleMatrix(OUTPUTS, 1);
     }
 
     /*
@@ -85,7 +81,6 @@ class NeuralNetwork {
      * @param input 28x28 pixel image file representing the input data
      * @param answers boolean representing numbers 0-9
      */
-
     public void train(File input, int[] answers) throws IOException {
         feedforward(input);
 
@@ -96,6 +91,8 @@ class NeuralNetwork {
         }
         SimpleMatrix answersMatrix = new SimpleMatrix(inArray);
 
+        SimpleMatrix[] errorMatrices = new SimpleMatrix[2];
+        
         /*
          * calculate and store errors in the output layer
          * outputError = output - answer
@@ -107,11 +104,11 @@ class NeuralNetwork {
          * based on the error in the output layer
          * hiddenError = transpose(weights) * outputError
          */
-        errorMatrices[0] = weightMatrices[1].transpose().mult(errorMatrices[1]);
+        errorMatrices[0] = (weightMatrices[1].transpose()).mult(errorMatrices[1]);
 
         /*
-         * deltaWeightMatrices[0] = errorMatrices[0] ⊙ dsigmoid(outputMatrices[0])
-         * deltaWeightMatrices[1] = errorMatrices[1] ⊙ dsigmoid(outputMatrices[1])
+         * errorMatrices[0] = errorMatrices[0] ⊙ dsigmoid(outputMatrices[0])
+         * errorMatrices[1] = errorMatrices[1] ⊙ dsigmoid(outputMatrices[1])
          */
         SimpleMatrix copyMatrixZero = outputMatrices[0].copy();
         SimpleMatrix copyMatrixOne = outputMatrices[1].copy();
@@ -121,37 +118,38 @@ class NeuralNetwork {
         for(int i = 0; i < copyMatrixOne.numRows(); i++) {
             copyMatrixOne.set(i,0,dsigmoid(copyMatrixOne.get(i,0)));
         }
-        deltaWeightMatrices[0] = errorMatrices[0].elementMult(copyMatrixZero);
-        deltaWeightMatrices[1] = errorMatrices[1].elementMult(copyMatrixOne);
+        errorMatrices[0] = errorMatrices[0].elementMult(copyMatrixZero);
+        errorMatrices[1] = errorMatrices[1].elementMult(copyMatrixOne);
 
         /* modify the biases */
-        biasMatrices[0] = biasMatrices[0].plus(deltaWeightMatrices[0]);
-        biasMatrices[1] = biasMatrices[1].plus(deltaWeightMatrices[1]);
-
+        biasMatrices[0] = biasMatrices[0].minus(errorMatrices[0]);
+        biasMatrices[1] = biasMatrices[1].minus(errorMatrices[1]);
+        
         /*
-         * deltaWeightMatrices[0] *= transpose(inputMatrix)
-         * deltaWeightMatrices[1] *= transpose(outputMatrices[0])
-         */
-        deltaWeightMatrices[0] = deltaWeightMatrices[0].mult(inputMatrix.transpose());
-        deltaWeightMatrices[1] = deltaWeightMatrices[1].mult(outputMatrices[0].transpose());
+        * define weight deltas according to the rule:
+        * deltaWeight = error * transpose(input)
+        */
+        SimpleMatrix[] deltaWeightMatrices = new SimpleMatrix[2];
+        deltaWeightMatrices[0] = errorMatrices[0].mult(inputMatrix.transpose());
+        deltaWeightMatrices[1] = errorMatrices[1].mult(outputMatrices[0].transpose());
 
         /* multiply all deltas by the learning rate */
         for(int i = 0; i < deltaWeightMatrices[0].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[0].numCols(); j++) {
-                double value = deltaWeightMatrices[0].get(i,j) * -LR;
+                double value = deltaWeightMatrices[0].get(i,j) * LR;
                 deltaWeightMatrices[0].set(i,j,value);
             }
         }
         for(int i = 0; i < deltaWeightMatrices[1].numRows(); i++) {
             for(int j = 0; j < deltaWeightMatrices[1].numCols(); j++) {
-                double value = deltaWeightMatrices[1].get(i,j) * -LR;
+                double value = deltaWeightMatrices[1].get(i,j) * LR;
                 deltaWeightMatrices[1].set(i,j,value);
             }
         }
 
         /* modify the weights */
-        weightMatrices[0] = weightMatrices[0].plus(deltaWeightMatrices[0]);
-        weightMatrices[1] = weightMatrices[1].plus(deltaWeightMatrices[1]);
+        weightMatrices[0] = weightMatrices[0].minus(deltaWeightMatrices[0]);
+        weightMatrices[1] = weightMatrices[1].minus(deltaWeightMatrices[1]);
     }
 
     /*

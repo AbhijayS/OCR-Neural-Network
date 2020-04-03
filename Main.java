@@ -7,7 +7,7 @@ class Main {
         NeuralNetwork network = new NeuralNetwork();
         File eight = new File("eight.jpg");
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             network.train(eight, new int[]{0,0,0,0,0,0,0,0,1,0});
         }
 
