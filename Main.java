@@ -12,21 +12,29 @@ import java.awt.image.BufferedImage;
 
 class Main {
     static final int IMAGE_SIZE = 784;
-    static final int START_INDEX = 16;
+    static final int IMAGE_START_INDEX = 16;
+    static final int LABEL_START_INDEX = 8;
     public static void main(String[] args) throws Exception {
         NeuralNetwork network = new NeuralNetwork();
-        InputStream inputStream = new FileInputStream(new File("train-images.idx3-ubyte"));
-        ByteBuffer byteBuffer = ByteBuffer.wrap(inputStream.readAllBytes());
+        InputStream imageFileInputStream = new FileInputStream(new File("train-images.idx3-ubyte"));
+        InputStream labelFileInputStream = new FileInputStream(new File("train-labels.idx1-ubyte"));
+        ByteBuffer imageByteBuffer = ByteBuffer.wrap(imageFileInputStream.readAllBytes());
+        ByteBuffer labelByteBuffer = ByteBuffer.wrap(labelFileInputStream.readAllBytes());
 
         int IMAGE_ID = 0;
         int NUM_IMAGES = 5000;
 
-        outputImage(byteBuffer, IMAGE_ID, "five");
+        outputImage(imageByteBuffer, IMAGE_ID, "five");
+        System.out.println(labelByteBuffer.get(LABEL_START_INDEX+IMAGE_ID)&0xFF);
+
         for (int i = 0; i < NUM_IMAGES; i++) {
-            network.train(getImageFromBuffer(byteBuffer, IMAGE_ID), new int[] {0,0,0,0,0,1,0,0,0,0});
+            // create the answers array for every label
+            // get the image from buffer
+            network.train(getImageFromBuffer(imageByteBuffer, IMAGE_ID), new int[] {0,0,0,0,0,1,0,0,0,0});
+            IMAGE_ID++;
         }
-        
-        double[] outputs = network.feedforward(getImageFromBuffer(byteBuffer, IMAGE_ID));
+
+        double[] outputs = network.feedforward(getImageFromBuffer(imageByteBuffer, IMAGE_ID));
 
         int index = 0;
         double max = 0;
@@ -55,9 +63,13 @@ class Main {
     static Color[] getImageFromBuffer(ByteBuffer buffer, int imageIndex) {
         Color[] image = new Color[IMAGE_SIZE];
         for (int i = 0; i < IMAGE_SIZE; i++) {
-            int c = buffer.get((imageIndex*IMAGE_SIZE)+START_INDEX+i)&0xFF;
+            int c = buffer.get((imageIndex*IMAGE_SIZE)+IMAGE_START_INDEX+i)&0xFF;
             image[i] = new Color(c, c, c);
         }
         return image;
+    }
+
+    static int[] getAnswersArrayFromBuffer(ByteBuffer buffer, int imageIndex) {
+        return __;
     }
 }
