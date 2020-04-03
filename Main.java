@@ -19,8 +19,12 @@ class Main {
         ByteBuffer byteBuffer = ByteBuffer.wrap(inputStream.readAllBytes());
 
         int IMAGE_ID = 0;
+        int NUM_IMAGES = 5000;
 
         outputImage(byteBuffer, IMAGE_ID, "five");
+        for (int i = 0; i < NUM_IMAGES; i++) {
+            network.train(getImageFromBuffer(byteBuffer, IMAGE_ID), new int[] {0,0,0,0,0,1,0,0,0,0});
+        }
         
         double[] outputs = network.feedforward(getImageFromBuffer(byteBuffer, IMAGE_ID));
 
